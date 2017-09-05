@@ -323,6 +323,11 @@ static int map_create(union bpf_attr *attr)
 	if (err)
 		return -EINVAL;
 
+	if (numa_node != NUMA_NO_NODE &&
+	    ((unsigned int)numa_node >= nr_node_ids ||
+	     !node_online(numa_node)))
+		return -EINVAL;
+
 	/* find map type and init map: hashtable vs rbtree vs bloom vs ... */
 	map = find_and_alloc_map(attr);
 	if (IS_ERR(map))
