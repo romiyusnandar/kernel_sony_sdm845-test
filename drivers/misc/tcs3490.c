@@ -128,15 +128,15 @@ enum tcs3490_regs {
     TCS3490_ALS_MAXTHRESHLO,  // 0x86
     TCS3490_ALS_MAXTHRESHHI,  // 0x87
     TCS3490_RESV_2,                     // 0x88
-    TCS3490_PRX_MINTHRESHLO,  // 0x89 -> Not used for TCS3490 
+    TCS3490_PRX_MINTHRESHLO,  // 0x89 -> Not used for TCS3490
 
-    TCS3490_RESV_3,                    // 0x8A 
-    TCS3490_PRX_MAXTHRESHHI, // 0x8B  -> Not used for TCS3490 
-    TCS3490_PERSISTENCE,          // 0x8C   
+    TCS3490_RESV_3,                    // 0x8A
+    TCS3490_PRX_MAXTHRESHHI, // 0x8B  -> Not used for TCS3490
+    TCS3490_PERSISTENCE,          // 0x8C
     TCS3490_CONFIG,                    // 0x8D
     TCS3490_PRX_PULSE_COUNT,  // 0x8E  -> Not used for TCS3490
-    TCS3490_GAIN,                        // 0x8F  : Gain Control Register  
-    TCS3490_AUX,                          // 0x90  
+    TCS3490_GAIN,                        // 0x8F  : Gain Control Register
+    TCS3490_AUX,                          // 0x90
     TCS3490_REVID,
     TCS3490_CHIPID,
     TCS3490_STATUS,                    // 0x93
@@ -146,7 +146,7 @@ enum tcs3490_regs {
     TCS3490_RED_CHANLO,           // 0x96
     TCS3490_RED_CHANHI,           // 0x97
     TCS3490_GRN_CHANLO,           // 0x98
-    TCS3490_GRN_CHANHI,           // 0x99 
+    TCS3490_GRN_CHANHI,           // 0x99
     TCS3490_BLU_CHANLO,           // 0x9A
     TCS3490_BLU_CHANHI,           // 0x9B
     TCS3490_PRX_HI,                    // 0x9C
@@ -154,14 +154,14 @@ enum tcs3490_regs {
 
     TCS3490_PRX_OFFSET,            // 0x9E
     TCS3490_RESV_4,                    // 0x9F
-    TCS3490_IRBEAM_CFG,            // 0xA0  
-    TCS3490_IRBEAM_CARR,          // 0xA1   
-    TCS3490_IRBEAM_NS,              // 0xA2 
-    TCS3490_IRBEAM_ISD,            // 0xA3 
+    TCS3490_IRBEAM_CFG,            // 0xA0
+    TCS3490_IRBEAM_CARR,          // 0xA1
+    TCS3490_IRBEAM_NS,              // 0xA2
+    TCS3490_IRBEAM_ISD,            // 0xA3
     TCS3490_IRBEAM_NP,              // 0xA4
     TCS3490_IRBEAM_IPD,            // 0xA5
     TCS3490_IRBEAM_DIV,            // 0xA6
-    TCS3490_IRBEAM_LEN,            // 0xA7 
+    TCS3490_IRBEAM_LEN,            // 0xA7
 
     TCS3490_IRBEAM_STAT,         // 0xA8
 
@@ -712,16 +712,15 @@ static int tcs3490_check_and_report(struct tcs3490_chip *chip)
     u8 saturation;
 
     int ret = tcs3490_read_all(chip);
-    if (ret) {
+    if (ret)
         goto exit_clr;
-	}
 
 	mutex_lock(&chip->lock);
     status = chip->shadow[TCS3490_STATUS];
 	mutex_unlock(&chip->lock);
 
     saturation = chip->als_inf.saturation;
-    
+
     if ((status & (TCS3490_ST_ALS_VALID | TCS3490_ST_ALS_IRQ)) ==
             (TCS3490_ST_ALS_VALID | TCS3490_ST_ALS_IRQ)) {
 	tcs3490_get_als_setup_next(chip);
@@ -1008,9 +1007,8 @@ static ssize_t tcs3490_als_gain_store(struct device *dev,
     if (rc)
         return -EINVAL;
     if (gain != 0 && gain != 1 && gain != 4 && gain != 16 &&
-            gain != 60 && gain != 64) {
+            gain != 60 && gain != 64)
         return -EINVAL;
-	}
 
 	mutex_lock(&chip->lock);
 	if (gain) {
@@ -1075,9 +1073,8 @@ static ssize_t tcs3490_als_itime_store(struct device *dev,
     struct tcs3490_chip *chip = dev_get_drvdata(dev);
 
     rc = kstrtoul(buf, 10, &itime);
-    if (rc) {
+    if (rc)
         return -EINVAL;
-	}
 
 	mutex_lock(&chip->lock);
 	chip->shadow[TCS3490_ALS_TIME] =
